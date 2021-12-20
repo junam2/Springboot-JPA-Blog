@@ -2,6 +2,10 @@ server:
   port: 8000
   servlet:
     context-path: /blog
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
 
 spring:
   mvc:
@@ -21,10 +25,10 @@ spring:
       ddl-auto: create
       naming:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
-      use-new-id-generator-mappings: false
-    show-sql: true
+      use-new-id-generator-mappings: false # jpa의 기본 전략을 따라하지 않겠다.
+    show-sql: true # 로그에 sql 쿼리 보여주기
     properties:
-      hibernate.format_sql: true
+      hibernate.format_sql: true # sql formatting 설정 (안하면 한 줄로 보임)
 
   jackson:
     serialization:
