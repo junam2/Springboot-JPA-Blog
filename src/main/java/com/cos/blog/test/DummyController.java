@@ -8,11 +8,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.function.Supplier;
 
@@ -22,6 +20,45 @@ public class DummyController {
     // DummyController가 메모리에 오를 때 자동으로 같이 메모리에 띄워준다. -> 의존성 주입 (DI)
     @Autowired
     private UserRepository userRepository;
+
+    @DeleteMapping("/dummy/user/{id}")
+    public String deleteUser(@PathVariable int id) {
+        try {
+            userRepository.deleteById(id);
+        } catch (Exception e) {
+            return "삭제에 실패하였습니다. 해당 id는 DB에 없습니다.";
+        }
+
+        return "삭제 되었습니다. id: " + id;
+    }
+
+    // @Transactional 을 사용하면 함수 종료 시 자동 commit 된다.
+    // 같은 path 라도 get,put 이 다르므로 상관없다.
+    // email,password 만 수정 가능
+    @Transactional
+    @PutMapping("/dummy/user/{id}")
+    public User updateUser(@PathVariable int id, @RequestBody User requestUser) {
+
+        // 이 때, 영속화가 된다.
+        User user = userRepository.findById(id).orElseThrow(()->{
+            return new IllegalArgumentException("수정에 실패하였습니다.");
+        });
+
+        user.setPassword(requestUser.getPassword());
+        user.setEmail(requestUser.getEmail());
+
+        /*
+        - save 함수는
+        1. id를 전달하지 않으면 insert
+        2. id에 대한 데이터가 있으면 update
+        3. id에 대한 데이터가 없으면 insert
+
+        userRepository.save(user);
+         */
+
+        // 함수가 끝나면서 자동으로 commit 되고, 변경을 감지해서 (더티 체킹) 1차 캐시에서 flush 까지 이루어진다.
+        return user;
+    }
 
     @GetMapping("/dummy/users")
     public List<User> list() {
