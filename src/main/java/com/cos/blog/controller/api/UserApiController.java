@@ -1,7 +1,6 @@
 package com.cos.blog.controller.api;
 
 import com.cos.blog.dto.ResponseDto;
-import com.cos.blog.model.RoleType;
 import com.cos.blog.model.User;
 import com.cos.blog.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,10 +17,7 @@ public class UserApiController {
 
     @PostMapping("/auth/joinProc")
     public ResponseDto<Integer> save(@RequestBody User user) {
-
-        user.setRole(RoleType.USER);
         int result = userService.Join(user);
-
         return new ResponseDto<Integer>(HttpStatus.OK.value(),result);
     }
 
