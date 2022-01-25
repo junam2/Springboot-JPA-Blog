@@ -7,8 +7,8 @@
     <c:forEach var="board" items="${boards.content}">
         <div class="card m-2">
             <div class="card-body">
-                <h4 class="card-title">${boards.title}</h4>
-                <a href="/board/${boards.id}" class="btn btn-primary stretched-link">상세 보기</a>
+                <h4 class="card-title">${board.title}</h4>
+                <a href="/board/${board.id}" class="btn btn-primary stretched-link">상세 보기</a>
             </div>
         </div>
     </c:forEach>

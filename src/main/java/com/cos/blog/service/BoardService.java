@@ -42,4 +42,17 @@ public class BoardService {
         boardRepository.deleteById(id);
     }
 
+    @Transactional
+    public void updateBoard(int id, Board requestBoard) {
+        Board board = boardRepository.findById(id)
+                .orElseThrow(()->{
+                    return new IllegalArgumentException("글 찾기 실패. id: " + id);
+                }); // 영속화 완료
+
+        board.setTitle(requestBoard.getTitle());
+        board.setContent(requestBoard.getContent());
+
+        // 해당 함수 종료 시, 트랜잭션 종료. 이 때 더티 체킹이 일어나면서 자동 db flush
+    }
+
 }
