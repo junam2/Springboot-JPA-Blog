@@ -45,7 +45,22 @@ public class UserService {
         return -1;
     }
 
-//    @Transactional(readOnly = true)
+    @Transactional
+    public void editUser(User user) {
+        User persistance = userRepository.findById(user.getId()).
+                orElseThrow(()->{
+                    return new IllegalArgumentException("회원 찾기 실패");
+                });
+
+        String rawPassword = user.getPassword();
+        String encPassword = encoder.encode(rawPassword);
+        persistance.setPassword(encPassword);
+        persistance.setEmail(user.getEmail());
+
+        // 회원 수정 함수 종료 시 자동으로 더티 체킹
+    }
+
+//    @ransactional(readOnly = true)
 //    select 할 때 트랜잭션 시작, 해당 서비스가 종료 될때 트랜잭션이 종료 정합성을 유지
 //    public User Login(User user) {
 //        return userRepository.findByUsernameAndPassword(user.getUsername(), user.getPassword());
