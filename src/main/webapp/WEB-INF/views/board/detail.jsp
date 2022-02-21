@@ -30,6 +30,7 @@
 
     <div class="card">
         <form>
+            <input type="hidden" id="userId" value="${principal.user.id}">
             <input type="hidden" id="boardId" value="${board.id}">
             <div><textarea id="reply-content" class="card-body form-control" rows="1"></textarea></div>
         </form>
