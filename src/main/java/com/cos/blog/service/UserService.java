@@ -52,15 +52,27 @@ public class UserService {
                     return new IllegalArgumentException("회원 찾기 실패");
                 });
 
-        String rawPassword = user.getPassword();
-        String encPassword = encoder.encode(rawPassword);
-        persistance.setPassword(encPassword);
-        persistance.setEmail(user.getEmail());
+        // oauth validation 체크
+        if(persistance.getOauth() == null || persistance.getOauth().equals("")) {
+            String rawPassword = user.getPassword();
+            String encPassword = encoder.encode(rawPassword);
+            persistance.setPassword(encPassword);
+            persistance.setEmail(user.getEmail());
+        }
 
         // 회원 수정 함수 종료 시 자동으로 더티 체킹
     }
 
-//    @ransactional(readOnly = true)
+    @Transactional(readOnly = true)
+    public User findUser(String username) {
+        User user = userRepository.findByUsername(username).orElseGet(()->{
+            return new User();
+        });
+
+        return user;
+    }
+
+//    @Transactional(readOnly = true)
 //    select 할 때 트랜잭션 시작, 해당 서비스가 종료 될때 트랜잭션이 종료 정합성을 유지
 //    public User Login(User user) {
 //        return userRepository.findByUsernameAndPassword(user.getUsername(), user.getPassword());

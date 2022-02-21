@@ -21,7 +21,7 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY) // 프로젝트에서 연결된 DB의 넘버링 전략을 따라간다.
     private int id;
 
-    @Column(nullable = false, length = 30, unique = true)
+    @Column(nullable = false, length = 100, unique = true)
     private String username;
 
     @Column(nullable = false, length = 100) // 해쉬를 통한 암호화 필요
@@ -36,6 +36,8 @@ public class User {
     //DB는 roletypedl 이 없어 String임을 알려주는게 좋다.
     @Enumerated(EnumType.STRING)
     private RoleType role;
+
+    private String oauth; // kakao, google 등 구분
 
     @CreationTimestamp // 시간 자동 입력 ( now() )
     private Timestamp createDate;
