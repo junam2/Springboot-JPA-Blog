@@ -4,7 +4,6 @@ import com.cos.blog.config.auth.PrincipalDetail;
 import com.cos.blog.dto.ReplySaveRequestDto;
 import com.cos.blog.dto.ResponseDto;
 import com.cos.blog.model.Board;
-import com.cos.blog.model.Reply;
 import com.cos.blog.service.BoardService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -40,8 +39,7 @@ public class BoardApiController {
 
     // 데이터 받을 때 컨트롤러에서 dto 만드는게 좋다.
     @PostMapping("/api/board/{boardId}/reply")
-    public ResponseDto<Integer> saveReply(@PathVariable ReplySaveRequestDto replySaveRequestDto) {
-
+    public ResponseDto<Integer> saveReply(@RequestBody ReplySaveRequestDto replySaveRequestDto) {
         boardService.writeReply(replySaveRequestDto);
 
         return new ResponseDto<Integer>(HttpStatus.OK.value(),1);

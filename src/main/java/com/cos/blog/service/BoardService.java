@@ -2,7 +2,6 @@ package com.cos.blog.service;
 
 import com.cos.blog.dto.ReplySaveRequestDto;
 import com.cos.blog.model.Board;
-import com.cos.blog.model.Reply;
 import com.cos.blog.model.User;
 import com.cos.blog.repository.BoardRepository;
 import com.cos.blog.repository.ReplyRepository;
@@ -68,21 +67,20 @@ public class BoardService {
     @Transactional
     public void writeReply(ReplySaveRequestDto replySaveRequestDto) {
 
-        User user = userRepository.findById(replySaveRequestDto.getBoardId()).orElseThrow(()->{
-            return new IllegalArgumentException("댓글 쓰기 실패 : 유저를 찾을 수 없습니다.");
-        });
-
-        Board board = boardRepository.findById(replySaveRequestDto.getBoardId()).orElseThrow(()->{
-            return new IllegalArgumentException("댓글 쓰기 실패 : 게시글 id를 찾을 수 없습니다.");
-        });
-
-        Reply reply = Reply.builder()
-                .user(user)
-                .board(board)
-                .content(replySaveRequestDto.getContent())
-                .build();
-
-        replyRepository.save(reply);
+//        User user = userRepository.findById(replySaveRequestDto.getBoardId()).orElseThrow(()->{
+//            return new IllegalArgumentException("댓글 쓰기 실패 : 유저를 찾을 수 없습니다.");
+//        });
+//
+//        Board board = boardRepository.findById(replySaveRequestDto.getBoardId()).orElseThrow(()->{
+//            return new IllegalArgumentException("댓글 쓰기 실패 : 게시글 id를 찾을 수 없습니다.");
+//        });
+//
+//        Reply reply = Reply.builder()
+//                .user(user)
+//                .board(board)
+//                .content(replySaveRequestDto.getContent())
+//                .build();
+        replyRepository.mSave(replySaveRequestDto.getUserId(), replySaveRequestDto.getBoardId(), replySaveRequestDto.getContent());
     }
 
 }
