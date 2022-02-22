@@ -36,7 +36,8 @@ public class Board {
     @JoinColumn(name="userId")
     private User user; // User 테이블의 ID -> ORM 에서는 자바 오브젝트를 이용할 수 있다.
 
-    @OneToMany(mappedBy = "board", fetch = FetchType.EAGER) // mappedBy 연관관계의 주인이 아니다. (FK가 아니다.) DB에 컬럼을 만들지 않는다.
+    // CascadeType.REMOVE -> board 를 지울 때 reply 도 함께 제거한다.
+    @OneToMany(mappedBy = "board", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE) // mappedBy 연관관계의 주인이 아니다. (FK가 아니다.) DB에 컬럼을 만들지 않는다.
     @JsonIgnoreProperties({"board"})
     @OrderBy("id desc")
     private List<Reply> replies;
